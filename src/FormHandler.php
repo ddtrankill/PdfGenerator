@@ -2,7 +2,7 @@
 
 namespace App;
 
-use FPDF;
+use TCPDF;
 
 /**
  * FormHandler
@@ -13,15 +13,21 @@ use FPDF;
  */
 class FormHandler
 {
-    public function __construct($request) {
-        $pdf = new FPDF();
+    public function __construct($request)
+    {
+        $pdf = new TCPDF('P', 'mm', 'A4', true, 'UTF-8');
+
+        // remove default header/footer
+        $pdf->setPrintHeader(false);
+        $pdf->setPrintFooter(false);
+
         $pdf->AddPage();
         foreach ($request['inputs'] as $key => $input) {
-            $pdf->SetFont('Arial','B',15);
-            $pdf->MultiCell(0, 12, $request['inputs-field'][$key]);
+            $pdf->SetFont('dejavusans', 'B', 15);
+            $pdf->MultiCell(0, 9, $request['inputs-field'][$key]);
 
-            $pdf->SetFont('Arial','',12);
-            $pdf->MultiCell(0, 10, $input);
+            $pdf->SetFont('dejavusans', '', 12);
+            $pdf->MultiCell(0, 7, $input);
         }
         $pdf->Output();
     }
